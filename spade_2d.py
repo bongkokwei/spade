@@ -274,7 +274,13 @@ def numerical_overlap_factor_2d(qx, qy, params, integration_limit=10):
     return P1_q
 
 
-def calculate_overlap_factors_grid(qx_max, qy_max, params, integration_limit=10):
+def calculate_overlap_factors_grid(
+    qx_max,
+    qy_max,
+    params,
+    integration_limit=10,
+    exact=True,
+):
     """
     Calculate overlap factors for a grid of mode indices (qx, qy).
 
@@ -296,13 +302,19 @@ def calculate_overlap_factors_grid(qx_max, qy_max, params, integration_limit=10)
 
     overlap_factors = np.zeros((qx_max + 1, qy_max + 1))
 
+    if exact:
+        overlap_factors_2d = partial(exact_overlap_factor_2d, params=params)
+    else:
+        overlap_factors_2d = partial(
+            numerical_overlap_factor_2d,
+            params=params,
+            integration_limit=integration_limit,
+        )
+
     # This can be slow for large qx_max, qy_max
     for qx in range(qx_max + 1):
         for qy in range(qy_max + 1):
-            # overlap_factors[qx, qy] = numerical_overlap_factor_2d(
-            #     qx, qy, params, integration_limit
-            # )
-            overlap_factors[qx, qy] = exact_overlap_factor_2d(qx, qy, params)
+            overlap_factors[qx, qy] = overlap_factors_2d(qx, qy)
 
     return overlap_factors
 
@@ -601,8 +613,8 @@ if __name__ == "__main__":
             "qx_max": qx_max,
             "qy_max": qy_max,
             "mean_photon_num": 10,
-            "num_trials": 100,
-            "num_separations": 60,
+            "num_trials": 1,
+            "num_separations": 2,
             "integraton_limit": 15,
             "sep_limit": 10,
             "psf_params": psf_params,
