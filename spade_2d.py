@@ -508,12 +508,7 @@ def run_simulation(
 
 
 def plot_simulation_results_2d(
-    theta2x,
-    theta2y,
-    theta2_est,
-    theta2,
-    theta2_x_arr,
-    theta2_y_arr,
+    results,
     params,
     simlation_param,
     figsize=(12, 5),
@@ -531,6 +526,8 @@ def plot_simulation_results_2d(
     --------
     fig, axes: Figure and axes objects
     """
+
+    theta2x, theta2y, theta2_est, theta2, theta2_x_arr, theta2_y_arr = results
 
     sigma = params.get("sigma", 1)
     L = simlation_param.get("mean_photon_num", 100)
@@ -612,25 +609,19 @@ if __name__ == "__main__":
         simulation_param = {
             "qx_max": qx_max,
             "qy_max": qy_max,
-            "mean_photon_num": 10,
-            "num_trials": 1,
-            "num_separations": 2,
+            "mean_photon_num": 1000,
+            "num_trials": 1000,
+            "num_separations": 50,
             "integraton_limit": 15,
             "sep_limit": 10,
             "psf_params": psf_params,
         }
 
         results = run_simulation(**simulation_param)
-        theta2x, theta2y, theta2_est, theta2, theta2_x_arr, theta2_y_arr = results
 
         # Plot results
         fig, axes = plot_simulation_results_2d(
-            theta2x,
-            theta2y,
-            theta2_est,
-            theta2,
-            theta2_x_arr,
-            theta2_y_arr,
+            results,
             psf_params,
             simulation_param,
             figsize=(16, 5),
@@ -641,7 +632,11 @@ if __name__ == "__main__":
             os.makedirs("./data")
 
         # Save the figure
-        file_dir = f"./data/simulation_results_L_{simulation_param['mean_photon_num']}_q_{simulation_param['qx_max']}{simulation_param['qy_max']}.png"
+        file_dir = (
+            f"./data/simulation_results_L_"
+            f"{simulation_param['mean_photon_num']}_q_"
+            f"{simulation_param['qx_max']}{simulation_param['qy_max']}.png"
+        )
         fig.savefig(
             file_dir,
             dpi=300,

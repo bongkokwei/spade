@@ -3,3 +3,4 @@ scipy
 matplotlib
 lpmodes
 tqdm
+numba
