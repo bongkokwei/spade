@@ -3,4 +3,7 @@ scipy
 matplotlib
 lpmodes
 tqdm
-numba
+torch
+scikit-learn
+torch-vision
+seaborn

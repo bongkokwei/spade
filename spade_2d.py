@@ -598,19 +598,19 @@ if __name__ == "__main__":
     psf_params = {
         "sigma": 1.0,
         "centroid_x": 0.0,
-        "centroid_y": 0.0,
+        "centroid_y": 2,
         "sep_x": 0.0,
         "sep_y": 0.0,
         "amp_1": 0.5,
         "amp_2": 0.5,
     }
 
-    for qx_max, qy_max in [(2, 2)]:
+    for qx_max, qy_max in [(6, 6)]:
         simulation_param = {
             "qx_max": qx_max,
             "qy_max": qy_max,
             "mean_photon_num": 1000,
-            "num_trials": 1000,
+            "num_trials": 100,
             "num_separations": 50,
             "integraton_limit": 15,
             "sep_limit": 10,
